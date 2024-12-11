@@ -4,6 +4,7 @@ from typing import List
 
 
 class GoogleAdminClient:
+    
     def __init__(self, service_account_file: str, admin_email: str):
         """
         Inicializa o cliente do Google Admin com autenticação da Service Account.

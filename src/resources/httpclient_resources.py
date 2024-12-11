@@ -19,20 +19,21 @@ class HttpClient(InterfaceHttpClient):
         if not value.startswith("http"):
             raise ValueError("Verifique se a URL começa com 'http' ou 'https'.")
     
-    def get(self, endpoint, params = None) -> requests.Response:
+    def get(self, endpoint: str, params = None, headers: Optional[Any] = None) -> requests.Response:
         url = f"{self.base_url}/{endpoint.strip('/')}"
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()
+        return response.json()
+
+    def post(self, endpoint: str, data: Optional[Dict] = None, json: Optional[Any] = None, headers: Optional[Any] = None) -> requests.Response:
+        url = f"{self.base_url}/{endpoint.strip('/')}"
+        response = requests.post(url, data=data, json=json, headers=headers)
         response.raise_for_status()
         return response
 
-    def post(self, endpoint: str, data: Optional[Dict] = None, json: Optional[Any] = None) -> requests.Response:
+    def put(self, endpoint: str, data: Optional[Dict] = None, json: Optional[Any] = None, headers: Optional[Any] = None) -> requests.Response:
         url = f"{self.base_url}/{endpoint.strip('/')}"
-        response = requests.post(url, data=data, json=json)
+        response = requests.put(url, data=data, json=json, headers=headers)
         response.raise_for_status()
         return response
-
-    def put(self, endpoint: str, data: Optional[Dict] = None, json: Optional[Any] = None) -> requests.Response:
-        url = f"{self.base_url}/{endpoint.strip('/')}"
-        response = requests.put(url, data=data, json=json)
-        response.raise_for_status()
-        return response
+    
